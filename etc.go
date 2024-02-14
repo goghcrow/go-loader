@@ -1,4 +1,4 @@
-package go_loader
+package loader
 
 import (
 	"fmt"
