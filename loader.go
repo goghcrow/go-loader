@@ -1,7 +1,9 @@
 package loader
 
 import (
+	"bytes"
 	"go/ast"
+	"go/printer"
 	"go/token"
 	"os"
 	"path/filepath"
@@ -188,6 +190,19 @@ func (l *Loader) visitFileImports(file *File, yield func(name *ast.Ident, path s
 			yield(name, path)
 		}
 	}
+}
+
+func (l *Loader) ShowPos(n ast.Node) string {
+	return l.FSet.Position(n.Pos()).String()
+}
+
+func (l *Loader) ShowNode(n ast.Node) string {
+	// if IsPseudoNode(n) {
+	// 	return showPseudoNode(fset, n)
+	// }
+	var buf bytes.Buffer
+	_ = printer.Fprint(&buf, l.FSet, n)
+	return buf.String()
 }
 
 func parseImportPath(s *ast.ImportSpec) string {
