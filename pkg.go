@@ -28,6 +28,10 @@ func MkPkg(p *Package) Pkg {
 	return Pkg{p}
 }
 
+func (p *Pkg) ShowPos(n ast.Node) string {
+	return p.Fset.Position(n.Pos()).String()
+}
+
 func (p *Pkg) ShowNode(n ast.Node) string {
 	show := func() string {
 		var buf bytes.Buffer
