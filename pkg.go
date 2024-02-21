@@ -2,21 +2,14 @@ package loader
 
 import (
 	"bytes"
-	"flag"
 	"go/ast"
 	"go/printer"
 	"go/token"
 	"go/types"
-	"os"
-	"strings"
 
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/typeutil"
 )
-
-// https://stackoverflow.com/questions/14249217/how-do-i-know-im-running-within-go-test
-var runningWithGoTest = flag.Lookup("test.v") != nil ||
-	strings.HasSuffix(os.Args[0], ".test")
 
 type Package = packages.Package
 
@@ -33,16 +26,9 @@ func (p *Pkg) ShowPos(n ast.Node) string {
 }
 
 func (p *Pkg) ShowNode(n ast.Node) string {
-	show := func() string {
-		var buf bytes.Buffer
-		_ = printer.Fprint(&buf, p.Fset, n)
-		return buf.String()
-	}
-	fset := p.Fset
-	if runningWithGoTest {
-		return show()
-	}
-	return show() + "\nat " + fset.Position(n.Pos()).String()
+	var buf bytes.Buffer
+	_ = printer.Fprint(&buf, p.Fset, n)
+	return buf.String()
 }
 
 func (p *Pkg) TypeInfo() *types.Info               { return p.TypesInfo }
