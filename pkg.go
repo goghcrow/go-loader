@@ -37,6 +37,7 @@ func (p *Pkg) TypeOf(e ast.Expr) types.Type        { return p.TypeInfo().TypeOf(
 func (p *Pkg) Callee(call *ast.CallExpr) types.Object {
 	return typeutil.Callee(p.TypeInfo(), call)
 }
+func (p *Pkg) Fun(fun ast.Expr) types.Object { return p.Callee(&ast.CallExpr{Fun: fun}) }
 
 func (p *Pkg) UpdateType(e ast.Expr, t types.Type) {
 	p.TypeInfo().Types[e] = types.TypeAndValue{Type: t}
