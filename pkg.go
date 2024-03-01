@@ -11,7 +11,10 @@ import (
 	"golang.org/x/tools/go/types/typeutil"
 )
 
-type Package = packages.Package
+type (
+	Package    = packages.Package
+	Positioner interface{ Pos() token.Pos }
+)
 
 type Pkg struct {
 	*Package
@@ -21,7 +24,7 @@ func MkPkg(p *Package) Pkg {
 	return Pkg{p}
 }
 
-func (p *Pkg) ShowPos(n ast.Node) string {
+func (p *Pkg) ShowPos(n Positioner) string {
 	return p.Fset.Position(n.Pos()).String()
 }
 
