@@ -42,6 +42,16 @@ func (p *Pkg) Callee(call *ast.CallExpr) types.Object {
 }
 func (p *Pkg) Fun(fun ast.Expr) types.Object { return p.Callee(&ast.CallExpr{Fun: fun}) }
 
+func (p *Pkg) ScopeFor(n ast.Node) *types.Scope {
+	switch fn := n.(type) {
+	case *ast.FuncDecl:
+		n = fn.Type
+	case *ast.FuncLit:
+		n = fn.Type
+	}
+	return p.TypeInfo().Scopes[n]
+}
+
 func (p *Pkg) UpdateType(e ast.Expr, t types.Type) {
 	p.TypeInfo().Types[e] = types.TypeAndValue{Type: t}
 }
